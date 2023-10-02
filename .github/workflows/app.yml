@@ -66,27 +66,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.3
         with:
-          releaseId: ${{ needs.create-release.outputs.release_id }}
+          name: 123
+          path: D:\a\ChatGPT-Next-Web\ChatGPT-Next-Web\src-tauri\target\release\bundle\
+          warn: Output a warning but do not fail the action
+          error: Fail the action with an error message
+          ignore: Do not output any warnings or errors, the action does not fail
 
-  publish-release:
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
-    needs: [create-release, build-tauri]
-
-    steps:
-      - name: publish release
-        id: publish-release
-        uses: actions/github-script@v6
-        env:
-          release_id: ${{ needs.create-release.outputs.release_id }}
-        with:
-          script: |
-            github.rest.repos.updateRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: process.env.release_id,
-              draft: false,
-              prerelease: false
-            })
