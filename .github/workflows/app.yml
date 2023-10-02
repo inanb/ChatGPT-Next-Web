@@ -31,7 +31,7 @@ jobs:
             #   repo: context.repo.repo,
             # })
             # return data.id
-            return data.id
+            return 1
 
   build-tauri:
     needs: create-release
